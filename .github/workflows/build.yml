@@ -5,12 +5,10 @@ concurrency:
   group: "build"
   cancel-in-progress: true
 
-
 on:
   push:
     branches:
       # choose your default branch
-      
       - main
     paths-ignore:
       - '*.md'
@@ -20,16 +18,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@main
         with:
           path: "src"
 
       - name: Checkout builds
-        uses: actions/checkout@master
+        uses: actions/checkout@main
         with:
           ref: "builds"
           path: "builds"
-
+      
       - name: Clean old builds
         run: rm $GITHUB_WORKSPACE/builds/*.cs3 || true
 
@@ -48,6 +46,7 @@ jobs:
           ./gradlew make makePluginsJson
           cp **/build/*.cs3 $GITHUB_WORKSPACE/builds
           cp build/plugins.json $GITHUB_WORKSPACE/builds
+
       - name: Push builds
         run: |
           cd $GITHUB_WORKSPACE/builds
