@@ -5,11 +5,12 @@ concurrency:
   group: "build"
   cancel-in-progress: true
 
+
 on:
   push:
     branches:
       # choose your default branch
-      - master
+      
       - main
     paths-ignore:
       - '*.md'
