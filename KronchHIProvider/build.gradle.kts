@@ -7,7 +7,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "With this extension you will be able to watch hindi hardsubbed/dubbed anime available in the Indian catalog of Crunchyroll."
-    authors = listOf("Stormunblessed, KillerDogeEmpire, lirena")
+    authors = listOf("Stormunblessed, lirena")
 
     /**
      * Status int as the following:
