@@ -1,14 +1,8 @@
 name: Build
 
-# https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#concurrency
-concurrency: 
-  group: "build"
-  cancel-in-progress: true
-
 on:
   push:
     branches:
-      # choose your default branch
       - main
     paths-ignore:
       - '*.md'
@@ -17,28 +11,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      # Checkout the repository in the default path
+      - name: Checkout repository
         uses: actions/checkout@main
-        with:
-          path: "src"
 
-      - name: Checkout builds
-        uses: actions/checkout@main
-        with:
-          ref: "builds"
-          path: "builds"
-      
+      # Clean old builds
       - name: Clean old builds
-        run: rm $GITHUB_WORKSPACE/builds/*.cs3 || true
+        run: rm -rf $GITHUB_WORKSPACE/builds/*.cs3 || true
 
+      # Setup JDK 11
       - name: Setup JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 11
 
+      # Setup Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
+      # Build Plugins
       - name: Build Plugins
         run: |
           cd $GITHUB_WORKSPACE/src
@@ -47,11 +38,12 @@ jobs:
           cp **/build/*.cs3 $GITHUB_WORKSPACE/builds
           cp build/plugins.json $GITHUB_WORKSPACE/builds
 
-      - name: Push builds
+      # Configure Git and push changes
+      - name: Configure Git and push
         run: |
           cd $GITHUB_WORKSPACE/builds
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit --amend -m "Build $GITHUB_SHA" || exit 0   # do not error if nothing to commit
-          git push --force
+          git commit -m "Build $GITHUB_SHA" || echo "No changes to commit"
+          git push
