@@ -1,4 +1,4 @@
-import com.lagradost.cloudstream3.gradle.CloudstreamExtension 
+import com.lagradost.cloudstream3.gradle.CloudstreamExtension
 import com.android.build.gradle.BaseExtension
 
 buildscript {
@@ -13,7 +13,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.0.4")
         // Cloudstream gradle plugin which makes everything work and builds plugins
         classpath("com.github.recloudstream:gradle:master-SNAPSHOT")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
     }
 }
 
@@ -25,9 +25,11 @@ allprojects {
     }
 }
 
-fun Project.cloudstream(configuration: CloudstreamExtension.() -> Unit) = extensions.getByName<CloudstreamExtension>("cloudstream").configuration()
+fun Project.cloudstream(configuration: CloudstreamExtension.() -> Unit) =
+    extensions.getByName<CloudstreamExtension>("cloudstream").configuration()
 
-fun Project.android(configuration: BaseExtension.() -> Unit) = extensions.getByName<BaseExtension>("android").configuration()
+fun Project.android(configuration: BaseExtension.() -> Unit) =
+    extensions.getByName<BaseExtension>("android").configuration()
 
 subprojects {
     apply(plugin = "com.android.library")
@@ -36,8 +38,9 @@ subprojects {
 
     cloudstream {
         // when running through github workflow, GITHUB_REPOSITORY should contain current repository name
-        // you can modify it to use other git hosting services, like gitlab
-        setRepo(System.getenv("GITHUB_REPOSITORY") ?: "https://github.com/KillerDogeEmpire/avocado-extensions")
+        setRepo(System.getenv("GITHUB_REPOSITORY") ?: "https://github.com/Stormunblessed/kamy-cs3")
+
+        authors = listOf("Stormunblessed")
     }
 
     android {
@@ -76,11 +79,13 @@ subprojects {
         // but you dont need to include any of them if you dont need them
         // https://github.com/recloudstream/cloudstream/blob/master/app/build.gradle
         implementation(kotlin("stdlib")) // adds standard kotlin features, like listOf, mapOf etc
-        implementation("com.github.Blatzar:NiceHttp:0.4.2") // http library
-        implementation("org.jsoup:jsoup:1.15.3") // html parser
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
-        implementation("io.karn:khttp-android:0.1.2")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+        implementation("com.github.Blatzar:NiceHttp:0.4.4") // http library
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+        implementation("org.jsoup:jsoup:1.16.2") // html parser
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // delay()
+
+        //run JS
+        implementation("org.mozilla:rhino:1.7.14")
     }
 }
 
