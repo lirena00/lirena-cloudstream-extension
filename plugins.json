@@ -1,0 +1,44 @@
+[
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://www.animesaga.in/",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/LiReNa00/lirena-cloudstream-extension",
+        "fileSize": 21008,
+        "status": 1,
+        "language": "hi",
+        "authors": [
+            "lirena"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie",
+            "Cartoon",
+            "TvSeries"
+        ],
+        "version": -1,
+        "internalName": "AnimesagaProvider",
+        "description": "Animesaga has vast library of hindi dubbed anime/movies.",
+        "url": "https://raw.githubusercontent.com/LiReNa00/lirena-cloudstream-extension/builds/AnimesagaProvider.cs3",
+        "name": "AnimesagaProvider"
+    },
+    {
+        "iconUrl": "https://raw.githubusercontent.com/Stormunblessed/IPTV-CR-NIC/main/logos/kronch.png",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/LiReNa00/lirena-cloudstream-extension",
+        "fileSize": 76296,
+        "status": 1,
+        "language": "hi",
+        "authors": [
+            "Stormunblessed, lirena"
+        ],
+        "tvTypes": [
+            "Anime",
+            "OVA"
+        ],
+        "version": 1,
+        "internalName": "KronchHIProvider",
+        "description": "With this extension you will be able to watch hindi hardsubbed/dubbed anime available in the Indian catalog of Crunchyroll.",
+        "url": "https://raw.githubusercontent.com/LiReNa00/lirena-cloudstream-extension/builds/KronchHIProvider.cs3",
+        "name": "KronchHIProvider"
+    }
+]
