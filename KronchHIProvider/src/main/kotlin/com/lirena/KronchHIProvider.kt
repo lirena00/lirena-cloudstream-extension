@@ -814,7 +814,7 @@ class KronchHIProvider: MainAPI() {
                     val m3u8Url = str.url
                     val testtting = app.get(m3u8Url!!, referer = "https://static.crunchyroll.com/").text
                     if (testtting.contains(Regex("(?i)accessdenied"))) handler.postFunction {
-                        context.let { tt -> Toast.makeText(tt, "Recarga los enlaces.", Toast.LENGTH_LONG).show() }
+                        context.let { tt -> Toast.makeText(tt, "Reload Links.", Toast.LENGTH_LONG).show() }
                     } else {
                         val raw = str.hardsubLocale?.isEmpty()
                         val hardsubinfo = str.hardsubLocale?.contains(Regex("hi-IN"))
