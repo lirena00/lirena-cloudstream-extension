@@ -6,7 +6,7 @@ import com.lagradost.cloudstream3.SearchResponse
 
 class AnimesagaProvider : MainAPI() { // all providers must be an instance of MainAPI
     override var mainUrl = "https://www.animesaga.in/animesaga" 
-    const var apiurl = "https://teplix.vercel.app/"
+    const val apiurl = "https://teplix.vercel.app/"
     override var name = "Animesaga"
     override val supportedTypes = setOf(
         TvType.Movie,
@@ -70,6 +70,11 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     )
 
+    data class Seasons(
+    
+    @JsonProperty("episodes") var episodes : ArrayList<Episodes> =arrayListof()
+
+    )
     data class Episodes (
 
     @JsonProperty("image" ) var image : String? = null,
@@ -112,7 +117,6 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
                 val seriesID = it.link
                 newAnimeSearchResponse(title!!, data) {
                     this.posterUrl = poster
-                    addDubStatus(isdub, issub)
                 }
             }
         if (home.isNotEmpty()) items.add(HomePageList("Popular", home))
