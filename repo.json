@@ -1,0 +1,8 @@
+{
+    "name": "Kronch Hindi",
+    "description": "Crunchyroll India Hindi",
+    "manifestVersion": 1,
+    "pluginLists": [
+      "https://raw.githubusercontent.com/lirena00/cloudstreamkronchhiprovider/builds/plugins.json"
+    ]
+}
