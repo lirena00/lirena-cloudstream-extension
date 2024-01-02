@@ -1,6 +1,5 @@
 package com.lirena
 
-
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
@@ -344,8 +343,8 @@ class KronchHIProvider: MainAPI() {
             }
 
         if (home.isNotEmpty()) items.add(HomePageList("Popular", home))
-        if (epss.isNotEmpty()) items.add(HomePageList("Nuevos episodios (SUB)", epss, true))
-        if (ssss.isNotEmpty()) items.add(HomePageList("Nuevos episodios (DUB)", ssss, true))
+        if (epss.isNotEmpty()) items.add(HomePageList("New Episodes (SUB)", epss, true))
+        if (ssss.isNotEmpty()) items.add(HomePageList("New Episodes (DUB)", ssss, true))
         if (items.size <= 0) throw ErrorLoadingException()
         return HomePageResponse(items)
     }
@@ -618,7 +617,7 @@ class KronchHIProvider: MainAPI() {
                         Regex("Piece: East Blue|Piece: Alabasta|Piece: Sky Island")
                     )
                     // || it.audioLocale == "ja-JP" || it.audioLocale == "zh-CN" || it.audioLocale
-                    // == "hi-IN" || it.audioLocale?.isEmpty() == true
+                    // == "es-ES" || it.audioLocale?.isEmpty() == true
                 }
             val innversions =
                 inn.filter {
@@ -737,9 +736,9 @@ class KronchHIProvider: MainAPI() {
     )
 
     data class Testt (
-        @JsonProperty("adaptive_hls")val adaptiveHLS: Map<String, BetaKronchS>? = null,
-        @JsonProperty("vo_adaptive_hls")val vrvHLS: Map<String, BetaKronchS>? = null,
-        @JsonProperty("multitrack_adaptive_hls_v2") val multiadaptiveHLS: Map<String, BetaKronchS>? = null,
+        @JsonProperty("drm_adaptive_hls")val adaptiveHLS: Map<String, BetaKronchS>? = null,
+        @JsonProperty("vo_drm_adaptive_hls")val vrvHLS: Map<String, BetaKronchS>? = null,
+        @JsonProperty("drm_multitrack_adaptive_hls_v2") val multiadaptiveHLS: Map<String,BetaKronchS>? = null,
     )
 
 
@@ -770,7 +769,6 @@ class KronchHIProvider: MainAPI() {
                 "es-ES" -> "Spanish"
                 "es-419" -> "Spanish LAT"
                 "fr-FR" -> "French"
-                "hi-IN" -> "Hindi"
                 "it-IT" -> "Italian"
                 "pt-BR" -> "Portuguese (Brazil)"
                 "pt-PT" -> "Portuguese (Portugal)"
@@ -784,6 +782,7 @@ class KronchHIProvider: MainAPI() {
                 "pl-PL" -> "Polish"
                 "ro-RO" -> "Romanian"
                 "sv-SE" -> "Swedish"
+                "hi-IN" -> "Hindi"
                 "" -> ""
                 else -> "[$locale] "
             }
@@ -808,7 +807,7 @@ class KronchHIProvider: MainAPI() {
             val bbb = listOfNotNull(vvhls, adphls)
             bbb.apmap { aa ->
                 aa.entries.filter {
-                    it.key == "hi-IN" || it.key.isEmpty()
+                    it.key == "hi-IN"  || it.key.isEmpty()
                 }.map {
                     it.value
                 }.amap {str ->
