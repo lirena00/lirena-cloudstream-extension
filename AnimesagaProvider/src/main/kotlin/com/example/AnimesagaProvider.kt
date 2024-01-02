@@ -6,8 +6,8 @@ import com.lagradost.cloudstream3.SearchResponse
 
 class AnimesagaProvider : MainAPI() { // all providers must be an instance of MainAPI
     override var mainUrl = "https://www.animesaga.in/animesaga" 
-    override var apiurl = "https://teplix.vercel.app/"
-    override var name = "Example provider"
+    const var apiurl = "https://teplix.vercel.app/"
+    override var name = "Animesaga"
     override val supportedTypes = setOf(
         TvType.Movie,
         TvType.Anime,
@@ -49,7 +49,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     @JsonProperty("img"           ) var img           : String? = null,
     @JsonProperty("title"         ) var title         : String? = null,
-    @JsonProperty("episode-title" ) var episode-title : String? = null,
+    @JsonProperty("episode-title" ) var episodeTitle : String? = null,
     @JsonProperty("link"          ) var link          : String? = null,
     @JsonProperty("episode_no"    ) var episodeNo     : Int?    = null
 
