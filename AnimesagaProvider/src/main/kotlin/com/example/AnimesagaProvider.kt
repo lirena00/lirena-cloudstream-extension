@@ -129,7 +129,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
     )
 
     data class ShowItems(
-        @JsonProperty("crunchyroll") val items: List<ShowItem>
+        @JsonProperty("shows") val items: List<ShowItem>
     )
 
     data class AnimeItem(
@@ -196,40 +196,6 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         homes.add(HomePageList("Shows", show))
         return HomePageResponse(homes) // Return the populated list
     }
-
-/* 
-    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-    val items = ArrayList<HomePageList>()
-    
-    // Fetch Recent items
-    val aaaa = app.get("$apiurl/recent").parsed<List<Recent>>()
-    val epss = aaaa.map { recent ->
-        recent.toHome() // Assuming toHome is a function defined somewhere
-    }
-    
-    // Fetch Crunchyroll items
-    val res = app.get("$apiurl/crunchyroll").parsed<List<Crunchyroll>>() // Assuming Crunchyroll is another data class you've defined
-    val home = res.map { item ->
-        val title = item.title
-        val poster = item.img
-        val seriesID = item.link
-        newAnimeSearchResponse(title!!,seriesID) {
-            this.posterUrl = poster
-        }
-    }
-    
-    // Add items to the list
-    if (home.isNotEmpty()) items.add(HomePageList("Popular", home))
-    if (epss.isNotEmpty()) items.add(HomePageList("New episodes (SUB)", epss, true))
-    // Add other items as needed
-    
-    // Throw an exception if no items are added
-    if (items.isEmpty()) throw ErrorLoadingException()
-    
-    return HomePageResponse(items)
-}
-
-*/
 
     // this function gets called when you search for something
     override suspend fun search(query: String): List<SearchResponse> {
