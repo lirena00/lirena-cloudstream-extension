@@ -112,6 +112,25 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         @JsonProperty("episode_no") var episode_no: String? = null,
     )
 
+    data class CrunchyItem(
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("link") var link: String? = null,
+        @JsonProperty("img") var img: String? = null
+    )
+
+    data class CrunchyItems(
+        @JsonProperty("crunchyroll") val items: List<CrunchyItem>
+    )
+
+    data class ShowItem(
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("link") var link: String? = null,
+        @JsonProperty("img") var img: String? = null
+    )
+
+    data class ShowItems(
+        @JsonProperty("crunchyroll") val items: List<ShowItem>
+    )
 
     data class AnimeItem(
         @JsonProperty("title") var title: String? = null,
@@ -131,14 +150,26 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         val homes = ArrayList<HomePageList>()
 
         val url = "$apiurl/recent"
-        val res = app.get(url).parsed<RecentItems>()
+        val recentRes = app.get(url).parsed<RecentItems>()
 
-        val recent = res.items.map { item ->
+        val recent = recentRes.items.map { item ->
+            val title = item.title
+            val poster = item.img
+            val id = item.link
+            val data = CustomData(id).toJson()
+
+            newAnimeSearchResponse(title!!, data) {
+                this.posterUrl = poster
+            }
+        }
+
+        val url_2 = "$apiurl/crunchyroll"
+        val crunchyRes = app.get(url_2).parsed<CrunchyItems>()
+
+        val crunchy = crunchyRes.items.map { item ->
             val title = item.title
             val image = item.img
             val id = item.link
-            val episode_no= item.episode_no
-            val episode_title= item.episode_title
             val data = CustomData(id).toJson()
 
             newAnimeSearchResponse(title!!, data) {
@@ -146,8 +177,23 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
             }
         }
 
+        val url_3 = "$apiurl/shows"
+        val showRes = app.get(url_3).parsed<ShowItems>()
 
+        val show = showRes.items.map { item ->
+            val title = item.title
+            val image = item.img
+            val id = item.link
+            val data = CustomData(id).toJson()
+
+            newAnimeSearchResponse(title!!, data) {
+                this.posterUrl = image
+            }
+        }
+
+        homes.add(HomePageList("Crunchyroll Dubs", crunchy))
         homes.add(HomePageList("Recent", recent))
+        homes.add(HomePageList("Shows", show))
         return HomePageResponse(homes) // Return the populated list
     }
 
