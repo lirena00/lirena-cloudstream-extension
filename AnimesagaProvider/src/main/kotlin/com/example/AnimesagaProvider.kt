@@ -258,8 +258,8 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     override suspend fun load(url: String): LoadResponse {
         val fixedData = "$apiurl/info?url=$url"
-        val parsedData = parsedData.title ?: "Default Title"
-        val title= parsedData.title
+        val parsedData = parseJson<Anime>(fixedData)
+        val title= parsedData.title ?: "Default Title"
         val poster= parsedData.img
         val tags = parsedData.tags
         val data = CustomData(url).toJson()
