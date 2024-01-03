@@ -116,7 +116,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         val title = item.title
         val poster = item.img
         val seriesID = item.link
-        newAnimeSearchResponse(title!!, data) {
+        newAnimeSearchResponse(title!!) {
             this.posterUrl = poster
         }
     }
@@ -144,7 +144,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
 
     // this function gets called when you search for something
-    override suspend fun search(query: String): List<SearchResponse> {
-        return listOf<SearchResponse>()
-    }
+//    override suspend fun search(query: String): List<SearchResponse> {
+//        return listOf<SearchResponse>()
+ //   }
 }
