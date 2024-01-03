@@ -100,7 +100,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
     )
  
 
-
+/* 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
     val items = ArrayList<HomePageList>()
     
@@ -132,7 +132,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
     return HomePageResponse(items)
 }
 
-
+*/
 
 
 
@@ -144,7 +144,23 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
 
     // this function gets called when you search for something
-//    override suspend fun search(query: String): List<SearchResponse> {
-//        return listOf<SearchResponse>()
- //   }
+    override suspend fun search(query: String): List<SearchResponse> {
+        val url="$apiurl/search?query=$query"
+        val search = ArrayList<SearchResponse>()
+        val res = app.get(url).parsed<Items>()
+        res.data.map{
+           item -> 
+           val title= item.title
+           val image = item.img
+           val id = item.link
+           val data = "{\"seriesID\":\"$id\"}"
+            search.add(newAnimeSearchResponse(title!!, data) {
+            this.posterUrl = image
+        })
+        }
+        return listOf<SearchResponse>()
+   }
 }
+
+
+    
