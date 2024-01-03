@@ -1,8 +1,8 @@
 {
-    "name": "Kronch Hindi",
-    "description": "Crunchyroll India Hindi",
+    "name": "lirena",
+    "description": "Mostly Hindi Websites",
     "manifestVersion": 1,
     "pluginLists": [
-      "https://raw.githubusercontent.com/lirena00/cloudstreamkronchhiprovider/builds/plugins.json"
+      "https://raw.githubusercontent.com/lirena00/lirena-cloudstream-extension/builds/plugins.json"
     ]
 }
