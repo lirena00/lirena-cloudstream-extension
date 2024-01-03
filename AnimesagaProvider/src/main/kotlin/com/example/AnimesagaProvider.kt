@@ -6,7 +6,6 @@ import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper
 import com.lagradost.cloudstream3.AcraApplication.Companion.context
 import com.lagradost.nicehttp.requestCreator
-import com.lirena.AnimesagaProviderPlugin.Companion.postFunction
 import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.net.PasswordAuthentication
@@ -103,36 +102,34 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val items = ArrayList<HomePageList>()
-        val aaaa =
-            app.get(
-                "$apiurl/recent",
-            ).parsed<Recent>()
-        val epss =
-            aaaa.items.map {
-                    it.toHome(Recent)
-                }
-        val res =
-            app.get(
-                "$apiurl/crunchyroll",
-            ).parsed<Crunchyroll>()
-        val home =
-            res.items.map {
-                val title = it.title
-                // val epss = it.seriesMetadata?.episodeCount
-      //          val posterstring = it.img?.posterTall.toString()
-                // val ttt = it.images?.posterTall?.get(0)?.get(6)?.source ?: ""
-                val poster = it.img
-                val seriesID = it.link
-                newAnimeSearchResponse(title!!, data) {
-                    this.posterUrl = poster
-                }
-            }
-        if (home.isNotEmpty()) items.add(HomePageList("Popular", home))
-        if (epss.isNotEmpty()) items.add(HomePageList("New episodes (SUB)", epss, true))
-        if (ssss.isNotEmpty()) items.add(HomePageList("New episodes (DUB)", ssss, true))
-        if (items.size <= 0) throw ErrorLoadingException()
-        return HomePageResponse(items)
+    val items = ArrayList<HomePageList>()
+    
+    // Fetch Recent items
+    val aaaa = app.get("$apiurl/recent").parsed<List<Recent>>()
+    val epss = aaaa.map { recent ->
+        recent.toHome() // Assuming toHome is a function defined somewhere
+    }
+    
+    // Fetch Crunchyroll items
+    val res = app.get("$apiurl/crunchyroll").parsed<List<Crunchyroll>>() // Assuming Crunchyroll is another data class you've defined
+    val home = res.map { item ->
+        val title = item.title
+        val poster = item.img
+        val seriesID = item.link
+        newAnimeSearchResponse(title!!, data) {
+            this.posterUrl = poster
+        }
+    }
+    
+    // Add items to the list
+    if (home.isNotEmpty()) items.add(HomePageList("Popular", home))
+    if (epss.isNotEmpty()) items.add(HomePageList("New episodes (SUB)", epss, true))
+    // Add other items as needed
+    
+    // Throw an exception if no items are added
+    if (items.isEmpty()) throw ErrorLoadingException()
+    
+    return HomePageResponse(items)
 }
 
 
