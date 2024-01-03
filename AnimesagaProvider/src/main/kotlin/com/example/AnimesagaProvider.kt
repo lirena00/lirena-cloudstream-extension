@@ -160,6 +160,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
             newAnimeSearchResponse(title!!, data) {
                 this.posterUrl = poster
+                isHorizontal=true
             }
         }
 
@@ -191,8 +192,8 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
             }
         }
 
-        homes.add(HomePageList("Crunchyroll Dubs", crunchy))
         homes.add(HomePageList("Recent", recent))
+        homes.add(HomePageList("Crunchyroll Dubs", crunchy))
         homes.add(HomePageList("Shows", show))
         return HomePageResponse(homes) // Return the populated list
     }
@@ -210,6 +211,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
             newAnimeSearchResponse(title!!, data) {
                 this.posterUrl = image
+                
             }
         }
 
