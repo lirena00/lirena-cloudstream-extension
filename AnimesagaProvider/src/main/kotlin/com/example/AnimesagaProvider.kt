@@ -129,6 +129,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val homes = ArrayList<HomePageList>()
+
         val url = "$apiurl/recent"
         val res = app.get(url).parsed<RecentItems>()
 
@@ -144,6 +145,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
                 this.posterUrl = image
             }
         }
+
 
         homes.add(HomePageList("Recent", recent))
         return HomePageResponse(homes) // Return the populated list
