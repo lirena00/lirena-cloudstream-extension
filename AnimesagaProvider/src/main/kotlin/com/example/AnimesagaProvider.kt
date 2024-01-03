@@ -99,7 +99,55 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
     @JsonProperty("subtitle" ) var subtitle : String? = null
 
     )
- 
+
+    data class RecentItems(
+        @JsonProperty("items") val items: List<AnimeItem>
+    )
+
+    data class RecentItem(
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("link") var link: String? = null,
+        @JsonProperty("img") var img: String? = null,
+        @JsonProperty("episode-title") var episode_title: String? = null,
+        @JsonProperty("episode_no") var episode_no: String? = null,
+    )
+
+
+    data class AnimeItem(
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("link") var link: String? = null,
+        @JsonProperty("img") var img: String? = null
+    )
+
+    data class AnimeItems(
+        @JsonProperty("items") val items: List<AnimeItem>
+    )
+    
+    data class CustomData(
+        @JsonProperty("seriesID") val seriesID: String?
+    )
+
+    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+        val homes = ArrayList<HomePageList>()
+        val url = "$apiurl/recent"
+        val res = app.get(url).parsed<RecentItems>()
+
+        val recent = res.items.map { item ->
+            val title = item.title
+            val image = item.img
+            val id = item.link
+            val episode_no= item.episode_no
+            val episode_title= item.episode_title
+            val data = CustomData(id).toJson()
+
+            newAnimeSearchResponse(title!!, data) {
+                this.posterUrl = image
+            }
+        }
+
+        homes.add(HomePageList("Recent", recent))
+        return HomePageResponse(homes) // Return the populated list
+    }
 
 /* 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
@@ -134,27 +182,6 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 }
 
 */
-
-
-
-
-
-    data class AnimeItem(
-        @JsonProperty("title") var title: String? = null,
-        @JsonProperty("link") var link: String? = null,
-        @JsonProperty("img") var img: String? = null
-    )
-
-    data class AnimeItems(
-        @JsonProperty("items") val items: List<AnimeItem>
-    )
-    
-    data class CustomData(
-        @JsonProperty("seriesID") val seriesID: String?
-    )
-
-
-
 
     // this function gets called when you search for something
     override suspend fun search(query: String): List<SearchResponse> {
