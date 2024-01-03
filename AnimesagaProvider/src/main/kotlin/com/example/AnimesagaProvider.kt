@@ -71,13 +71,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     )
 
-    data class Info (
 
-    @JsonProperty("title"   ) var title   : String?            = null,
-    @JsonProperty("tags"    ) var tags    : ArrayList<String>  = arrayListOf(),
-    @JsonProperty("seasons" ) var seasons : ArrayList<Seasons> = arrayListOf()
-
-    )
 
     data class Seasons (
     
@@ -97,6 +91,14 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
     @JsonProperty("token"    ) var token    : String? = null,
     @JsonProperty("file"     ) var file     : String? = null,
     @JsonProperty("subtitle" ) var subtitle : String? = null
+
+    )
+     
+    data class Info (
+
+    @JsonProperty("title"   ) var title   : String?            = null,
+    @JsonProperty("tags"    ) val items    : ArrayList<String>  = arrayListOf(),
+    @JsonProperty("seasons" ) var seasons : ArrayList<Seasons> = arrayListOf()
 
     )
 
@@ -160,7 +162,6 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
             newAnimeSearchResponse(title!!, data) {
                 this.posterUrl = poster
-                isHorizontal=true
             }
         }
 
@@ -217,5 +218,8 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
         return search // Return the populated list
     }
+
+
+
 
 }
