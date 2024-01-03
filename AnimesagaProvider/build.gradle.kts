@@ -24,5 +24,5 @@ cloudstream {
         "TvSeries"
     )
 
-    iconUrl = "https://raw.githubusercontent.com/Stormunblessed/IPTV-CR-NIC/main/logos/kronch.png"
+    iconUrl = "https://www.google.com/s2/favicons?sz=256&domain=https://www.animesaga.in/"
 }
