@@ -1,12 +1,21 @@
 package com.lirena
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.lagradost.cloudstream3.TvType
-import com.lagradost.cloudstream3.MainAPI
-import com.lagradost.cloudstream3.SearchResponse
+import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.utils.AppUtils.parseJson
+import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.M3u8Helper
+import com.lagradost.cloudstream3.AcraApplication.Companion.context
+import com.lagradost.nicehttp.requestCreator
+import com.lirena.KronchHIProviderPlugin.Companion.postFunction
+import java.net.Authenticator
+import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
+
 
 class AnimesagaProvider : MainAPI() { // all providers must be an instance of MainAPI
     override var mainUrl = "https://www.animesaga.in/animesaga" 
-    const val apiurl = "https://teplix.vercel.app/"
+    val apiurl = "https://teplix.vercel.app/"
     override var name = "Animesaga"
     override val supportedTypes = setOf(
         TvType.Movie,
@@ -70,9 +79,9 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     )
 
-    data class Seasons(
+    data class Seasons (
     
-    @JsonProperty("episodes") var episodes : ArrayList<Episodes> =arrayListof()
+    @JsonProperty("episodes") var episodes : ArrayList<Episodes> =arrayListOf()
 
     )
     data class Episodes (
