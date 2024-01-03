@@ -163,4 +163,4 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         return search // Return the populated list
     }
 
-    
+}
