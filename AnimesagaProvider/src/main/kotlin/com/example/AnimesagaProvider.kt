@@ -101,7 +101,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
     )
 
     data class RecentItems(
-        @JsonProperty("items") val items: List<AnimeItem>
+        @JsonProperty("recent") val items: List<RecentItem>
     )
 
     data class RecentItem(
