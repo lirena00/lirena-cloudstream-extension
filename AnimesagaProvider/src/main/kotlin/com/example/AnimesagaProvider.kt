@@ -214,7 +214,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         }
 
         val url_4 = "$apiurl/movies"
-        val moviesRes = app.get(url_4).parsed<MovieItems>()
+        val movieRes = app.get(url_4).parsed<MovieItems>()
 
         val movie = movieRes.items.map { item ->
             val title = item.title
@@ -258,12 +258,12 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     override suspend fun load(url: String): LoadResponse {
         val fixedData = "$apiurl/info?url=$url"
-        val parsedData = parseJson<Anime>(fixedData)
+        val parsedData = parsedData.title ?: "Default Title"
         val title= parsedData.title
         val poster= parsedData.img
         val tags = parsedData.tags
         val data = CustomData(url).toJson()
-        return newAnimeLoadResponse(title, data) {
+        return newAnimeLoadResponse(title, data,TvType.Anime) {
             this.tags = tags
             this.posterUrl = poster
 
