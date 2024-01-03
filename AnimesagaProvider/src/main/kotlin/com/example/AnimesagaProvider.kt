@@ -13,8 +13,8 @@ import java.net.Proxy
 
 
 class AnimesagaProvider : MainAPI() { // all providers must be an instance of MainAPI
-    override var mainUrl = "https://www.animesaga.in/animesaga" 
-    val apiurl = "https://teplix.vercel.app/"
+    override var mainUrl = "https://www.animesaga.in/" 
+    val apiurl = "https://teplix.vercel.app/animesaga"
     override var name = "Animesaga"
     override val supportedTypes = setOf(
         TvType.Movie,
