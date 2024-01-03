@@ -143,6 +143,17 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         @JsonProperty("shows") val items: List<ShowItem>
     )
 
+    data class MovieItem(
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("link") var link: String? = null,
+        @JsonProperty("img") var img: String? = null
+    )
+
+    data class MovieItems(
+        @JsonProperty("movies") val items: List<MovieItem>
+    )
+
+
     data class AnimeItem(
         @JsonProperty("title") var title: String? = null,
         @JsonProperty("link") var link: String? = null,
@@ -202,9 +213,25 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
             }
         }
 
+        val url_4 = "$apiurl/movies"
+        val moviesRes = app.get(url_4).parsed<MovieItems>()
+
+        val movie = movieRes.items.map { item ->
+            val title = item.title
+            val image = item.img
+            val id = item.link
+            val data = CustomData(id).toJson()
+
+            newAnimeSearchResponse(title!!, data) {
+                this.posterUrl = image
+            }
+        }
+
+
         homes.add(HomePageList("Recent", recent))
         homes.add(HomePageList("Crunchyroll Dubs", crunchy))
         homes.add(HomePageList("Shows", show))
+        homes.add(HomePageList("Movies", movie))
         return HomePageResponse(homes) // Return the populated list
     }
 
@@ -230,7 +257,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
 
     override suspend fun load(url: String): LoadResponse {
-        val url = "$apiurl/info?url=$url"
+        val fixedData = "$apiurl/info?url=$url"
         val parsedData = parseJson<Anime>(fixedData)
         val title= parsedData.title
         val poster= parsedData.img
