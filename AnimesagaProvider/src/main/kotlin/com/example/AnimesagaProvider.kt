@@ -94,12 +94,21 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     )
      
-    data class Info (
+    data class Anime(
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("img") var img: String? = null,
+        @JsonProperty("tags") var tags: List<String>? = null,
+        @JsonProperty("seasons") var seasons: List<Season>
+    )
 
-    @JsonProperty("title"   ) var title   : String?            = null,
-    @JsonProperty("tags"    ) val items    : ArrayList<String>  = arrayListOf(),
-    @JsonProperty("seasons" ) var seasons : ArrayList<Seasons> = arrayListOf()
+    data class Season(
+        @JsonProperty("episodes") var episodes: List<Episode>
+    )
 
+    data class Episode(
+        @JsonProperty("image") var image: String? = null,
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("link") var link: String? = null
     )
 
     data class RecentItems(
@@ -220,6 +229,18 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
     }
 
 
+    override suspend fun load(url: String): LoadResponse {
+        val url = "$apiurl/info?url=$url"
+        val parsedData = parseJson<Anime>(fixedData)
+        val title= parsedData.title
+        val poster= parsedData.img
+        val tags = parsedData.tags
+        val data = CustomData(url).toJson()
+        return newAnimeLoadResponse(title, data) {
+            this.tags = tags
+            this.posterUrl = poster
 
+         }
+}
 
 }
