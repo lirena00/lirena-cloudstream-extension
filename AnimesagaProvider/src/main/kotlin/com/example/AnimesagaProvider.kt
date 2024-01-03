@@ -116,7 +116,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
         val title = item.title
         val poster = item.img
         val seriesID = item.link
-        newAnimeSearchResponse(title!!) {
+        newAnimeSearchResponse(title!!,seriesID) {
             this.posterUrl = poster
         }
     }
