@@ -158,7 +158,7 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
     // this function gets called when you search for something
     override suspend fun search(query: String): List<SearchResponse> {
-        val url = "$apiurl/animesaga/search?query=$query"
+        val url = "$apiurl/search?query=$query"
         val res = app.get(url).parsed<AnimeItems>()
 
         val search = res.items.map { item ->
