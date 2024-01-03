@@ -138,28 +138,39 @@ class AnimesagaProvider : MainAPI() { // all providers must be an instance of Ma
 
 
 
+    data class AnimeItem(
+        @JsonProperty("title") var title: String? = null,
+        @JsonProperty("link") var link: String? = null,
+        @JsonProperty("img") var img: String? = null
+    )
 
+    data class AnimeItems(
+        @JsonProperty("items") val items: List<AnimeItem>
+    )
+    
+    data class CustomData(
+        @JsonProperty("seriesID") val seriesID: String?
+    )
 
 
 
 
     // this function gets called when you search for something
     override suspend fun search(query: String): List<SearchResponse> {
-        val url = "$apiurl/search?query=$query"
-        val search = ArrayList<SearchResponse>()
-        val res = app.get(url).parsed<Items>()
-        
-        res.data.map { item -> 
+        val url = "$apiurl/animesaga/search?query=$query"
+        val res = app.get(url).parsed<AnimeItems>()
+
+        val search = res.items.map { item ->
             val title = item.title
             val image = item.img
             val id = item.link
-            val data = "{\"seriesID\":\"$id\"}"
-            
-            search.add(newAnimeSearchResponse(title!!, data) {
+            val data = CustomData(id).toJson()
+
+            newAnimeSearchResponse(title!!, data) {
                 this.posterUrl = image
-            })
+            }
         }
-        
+
         return search // Return the populated list
     }
 
