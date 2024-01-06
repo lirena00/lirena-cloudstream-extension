@@ -875,3 +875,4 @@ class KronchHIProvider: MainAPI() {
         }
         return true
     }
+}
