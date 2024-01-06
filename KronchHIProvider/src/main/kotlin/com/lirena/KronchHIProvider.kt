@@ -1,5 +1,6 @@
 package com.lirena
 
+
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
@@ -27,7 +28,7 @@ class KronchHIProvider: MainAPI() {
         //private const val kronchyConsumetapi = "https://api.consumet.org/anime/crunchyroll"
 
     }
-    
+
     override var name = "Kronch HI"
     override var mainUrl = "https://www.crunchyroll.com"
     override val instantLinkLoading = false
@@ -135,6 +136,25 @@ class KronchHIProvider: MainAPI() {
          latestcountryID = consuToken.country!!
          return latestKrunchyHeader
      } */
+
+
+    data class CmsDataMain (
+        @JsonProperty("cms"                      ) val cms                   : CmsData     = CmsData(),
+    )
+
+    data class CmsData (
+
+        @JsonProperty("bucket"      ) var bucket    : String? = null,
+        @JsonProperty("policy"      ) var policy    : String? = null,
+        @JsonProperty("signature"   ) var signature : String? = null,
+        @JsonProperty("key_pair_id" ) var keyPairId : String? = null,
+        @JsonProperty("expires"     ) var expires   : String? = null
+
+    )
+    private suspend fun cmsInfo(): CmsData{
+        proxyToken()
+        return app.get("$krunchyapi/index/v2", headers = latestKrunchyHeader).parsed<CmsDataMain>().cms
+    }
 
     data class PosterTall (
         @JsonProperty("height" ) var height : Int?    = null,
@@ -313,7 +333,7 @@ class KronchHIProvider: MainAPI() {
 
         val ssss =
             aaaa.items
-                .filter { it.episodeMetadata?.audioLocale == "hi-IN" || it.episodeMetadata?.audioLocale == "hi-IN" }
+                .filter { it.episodeMetadata?.audioLocale == "hi-IN" }
                 .map {
                     it.toHome(DubStatus.Dubbed)
                 }
@@ -749,6 +769,11 @@ class KronchHIProvider: MainAPI() {
     )
 
 
+    data class KronchStreams (
+        @JsonProperty("subtitles"        ) var subtitle      : Map<String, Subtitle>?          = null,
+        @JsonProperty("streams"          ) var streams        : Testt?            = Testt(),
+    )
+
     data class BetaKronchGEOStreams (
         @JsonProperty("total" ) var total : Int?            = null,
         @JsonProperty("data"  ) var data  : ArrayList<Testt>? = arrayListOf(),
@@ -799,15 +824,17 @@ class KronchHIProvider: MainAPI() {
         val parsedata = parseJson<EpsInfo>(newdata)
         val mediaId = parsedata.id
         val issub = parsedata.issub == true
-        val response = app.get("$krunchyapi/content/v2/cms/videos/$mediaId/streams", latestKrunchyHeader).parsed<BetaKronchGEOStreams>()
-
-        response.data?.map {testt ->
-            val adphls = testt.multiadaptiveHLS ?: testt.adaptiveHLS
-            val vvhls = testt.vrvHLS
+        val cms = cmsInfo()
+        val url = "$krunchyapi/cms/v2/US/M3/crunchyroll/videos/$mediaId/streams?Policy=${cms.policy}&Signature=${cms.signature}&Key-Pair-Id=${cms.keyPairId}"
+        val response = app.get(url).parsed<KronchStreams>()
+        val links = arrayListOf(response.streams)
+        links.map {testt ->
+            val adphls = testt?.multiadaptiveHLS ?: testt?.adaptiveHLS
+            val vvhls = testt?.vrvHLS
             val bbb = listOfNotNull(vvhls, adphls)
             bbb.apmap { aa ->
                 aa.entries.filter {
-                    it.key == "hi-IN"  || it.key.isEmpty()
+                    it.key == "hi-IN" || it.key.isEmpty()
                 }.map {
                     it.value
                 }.amap {str ->
@@ -817,7 +844,7 @@ class KronchHIProvider: MainAPI() {
                         context.let { tt -> Toast.makeText(tt, "Reload Links.", Toast.LENGTH_LONG).show() }
                     } else {
                         val raw = str.hardsubLocale?.isEmpty()
-                        val hardsubinfo = str.hardsubLocale?.contains(Regex("hi-IN"))
+                        val hardsubinfo = str.hardsubLocale?.contains("hi-IN")
                         val hardss = str.hardsubLocale
                         val vvv = if (m3u8Url.contains("vrv.co")) "_VRV" else ""
                         val name = if (raw == false && issub && hardss?.contains("hi-IN") == true) "Kronch$vvv Hardsub Hindi"
@@ -835,15 +862,16 @@ class KronchHIProvider: MainAPI() {
                 }
             }
         }
-        response.meta?.subtitles?.map {
+
+        val subTest =response.subtitle
+        subTest?.map {
             it.value
         }?.map {
             val lang = fixLocale(it.locale)
-            val url = it.url
+            val subUrl = it.url
             subtitleCallback.invoke(
-                SubtitleFile(lang,url!!)
+                SubtitleFile(lang,subUrl!!)
             )
         }
         return true
     }
-}
