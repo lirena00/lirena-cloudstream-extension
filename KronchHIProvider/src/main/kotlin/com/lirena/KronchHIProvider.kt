@@ -1,6 +1,5 @@
 package com.lirena
 
-
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
@@ -11,7 +10,7 @@ import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper
 import com.lagradost.cloudstream3.AcraApplication.Companion.context
 import com.lagradost.nicehttp.requestCreator
-import com.lirena.KronchHIProviderPlugin.Companion.postFunction
+import com.lirena.KronchESProviderPlugin.Companion.postFunction
 import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.net.PasswordAuthentication
@@ -340,7 +339,7 @@ class KronchHIProvider: MainAPI() {
 
         val res =
             app.get(
-                "$krunchyapi/content/v1/browse?locale=hi-IN&n=30&sort_by=popularity",
+                "$krunchyapi/content/v1/browse?locale=es-ES&n=30&sort_by=popularity",
                 headers = latestKrunchyHeader
             ).parsed<KrunchyHome>()
 
@@ -363,8 +362,8 @@ class KronchHIProvider: MainAPI() {
             }
 
         if (home.isNotEmpty()) items.add(HomePageList("Popular", home))
-        if (epss.isNotEmpty()) items.add(HomePageList("New Episodes (SUB)", epss, true))
-        if (ssss.isNotEmpty()) items.add(HomePageList("New Episodes (DUB)", ssss, true))
+        if (epss.isNotEmpty()) items.add(HomePageList("Nuevos episodios (SUB)", epss, true))
+        if (ssss.isNotEmpty()) items.add(HomePageList("Nuevos episodios (DUB)", ssss, true))
         if (items.size <= 0) throw ErrorLoadingException()
         return HomePageResponse(items)
     }
@@ -693,7 +692,7 @@ class KronchHIProvider: MainAPI() {
                         val clip = pss.isClip == false
                         val audioss = pss.audioLocale
                         if (clip) {
-                            if (audioss == "hi-IN") {
+                            if (audioss == "hi-IN" ) {
                                 val dubss = pss.togetNormalEps(false)
                                 dubEps.add(dubss)
                             }
@@ -756,9 +755,9 @@ class KronchHIProvider: MainAPI() {
     )
 
     data class Testt (
-        @JsonProperty("drm_adaptive_hls")val adaptiveHLS: Map<String, BetaKronchS>? = null,
-        @JsonProperty("vo_drm_adaptive_hls")val vrvHLS: Map<String, BetaKronchS>? = null,
-        @JsonProperty("drm_multitrack_adaptive_hls_v2") val multiadaptiveHLS: Map<String,BetaKronchS>? = null,
+            @JsonProperty("adaptive_hls")val adaptiveHLS: Map<String, BetaKronchS>? = null,
+            @JsonProperty("vo_adaptive_hls")val vrvHLS: Map<String, BetaKronchS>? = null,
+            @JsonProperty("multitrack_adaptive_hls_v2") val multiadaptiveHLS: Map<String,BetaKronchS>? = null,
     )
 
 
@@ -834,20 +833,20 @@ class KronchHIProvider: MainAPI() {
             val bbb = listOfNotNull(vvhls, adphls)
             bbb.apmap { aa ->
                 aa.entries.filter {
-                    it.key == "hi-IN" || it.key.isEmpty()
+                    it.key == "es-ES" || it.key == "es-419" || it.key.isEmpty()
                 }.map {
                     it.value
                 }.amap {str ->
                     val m3u8Url = str.url
                     val testtting = app.get(m3u8Url!!, referer = "https://static.crunchyroll.com/").text
                     if (testtting.contains(Regex("(?i)accessdenied"))) handler.postFunction {
-                        context.let { tt -> Toast.makeText(tt, "Reload Links.", Toast.LENGTH_LONG).show() }
+                        context.let { tt -> Toast.makeText(tt, "Recarga los enlaces.", Toast.LENGTH_LONG).show() }
                     } else {
                         val raw = str.hardsubLocale?.isEmpty()
                         val hardsubinfo = str.hardsubLocale?.contains("hi-IN")
                         val hardss = str.hardsubLocale
                         val vvv = if (m3u8Url.contains("vrv.co")) "_VRV" else ""
-                        val name = if (raw == false && issub && hardss?.contains("hi-IN") == true) "Kronch$vvv Hardsub Hindi"
+                        val name = if (raw == false && issub && hardss?.contains("es-ES") == true) "Kronch$vvv Hardsub Hindi"
                         else if (!issub) "Kronch$vvv Hindi"
                         else "Kronch$vvv RAW"
 
