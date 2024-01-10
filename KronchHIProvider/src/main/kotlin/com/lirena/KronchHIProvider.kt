@@ -10,7 +10,7 @@ import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper
 import com.lagradost.cloudstream3.AcraApplication.Companion.context
 import com.lagradost.nicehttp.requestCreator
-import com.lirena.KronchESProviderPlugin.Companion.postFunction
+import com.lirena.KronchHIProviderPlugin.Companion.postFunction
 import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.net.PasswordAuthentication
